@@ -14,7 +14,7 @@ $rdp_host = 'ts.afnet.com'
 $rdp_user = 'user1'
 $rdp_pass = '!@12QWqwe'
 $net_root = '\\TS\Shared'
-$web_urls = 'google.com,espn.com,cnn.com,facebook.com'
+$web_urls = 'espn.com,cnn.com,facebook.com,yahoo.com,news.google.com'
 
 $pw = $net_use_pass|ConvertTo-SecureString -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential($net_use_name,$pw)

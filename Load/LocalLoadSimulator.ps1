@@ -69,7 +69,7 @@ do {
 
             # Simulate browsing
             $rand = (Get-Random -Minimum 0 -Maximum $r.Links.Count)
-            $r2 = Invoke-WebRequest -Uri $r.Links[$rand] -UserAgent $user_agent
+            $r2 = Invoke-WebRequest -Uri $r.Links[$rand].href -UserAgent $user_agent
             if ($r2.StatusCode -notcontains "200") {
                 Write-Warning "Warning:  Recieved status code '$r.StatusCode' on request to $url"
             }
