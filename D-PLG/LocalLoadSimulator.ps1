@@ -10,14 +10,17 @@ $net_use_host = $args[5]
 $urls         = $args[6]
 
 
-$rdp = 1
-$net_use = 1
-$web_req = 1
+$runtime = 300
+$reqs_per_second = 10
 
-$num_services = 3
+$rdp = 0
+$net_use = 0
+$web_req = 0
+
+$num_services = 1
 
 if ($runtime -eq $null) { $runtime = 60 }
-if ($reqs_sec -eq $null) { $reqs_sec = 2 }
+if ($reqs_sec -eq $null) { $reqs_sec = 10 }
 if ($rdp_host -eq $null) { $rdp_host = 'ts.afnet.com' }
 if ($name -eq $null ) { $name = "user1" }
 if ($pass -eq $null ) { $pass = "!@12QWqwe" }
@@ -31,7 +34,23 @@ do {
     for ( $i = 0; $i -lt $reqs_sec; $i+=$num_services ) {
 
         # Simple AD Authentication (use RDP credentials)
-        (new-object directoryservices.directoryentry "",$name,$pass).psbase.name -ne $null
+        if ((new-object directoryservices.directoryentry "",$name,$pass).psbase.name -eq $null) {
+
+            # Make connection
+            $connection = New-Object -TypeName System.Net.Sockets.TcpClient("192.168.224.7", 514)
+            $stream = $connection.GetStream()
+            $writer = New-Object System.IO.StreamWriter($stream)
+            $writer.AutoFlush = $true
+            
+            # Send Message
+            while (!$connection.Connected -and !$stream.CanWrite()) {}
+            $writer.WriteLine("SERVICE_FAILURE") | Out-Null
+            start-sleep -Milliseconds 500
+            
+            $reader.Close()
+            $connection.Close()
+            Exit
+        }
             
         # Remote Desktop
         if ($rdp) {
