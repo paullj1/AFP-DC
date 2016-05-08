@@ -10,10 +10,10 @@
 $net_use_name = 'Administrator'
 $net_use_pass = '!@12QWqwe'
 $clients = "client1.afnet.com,client2.afnet.com,client3.afnet.com,client4.afnet.com,client5.afnet.com".Split(',')
-$time = 300
-$reqs_per_sec = 2
+$time = 10080 # 1 Week
+$reqs_per_sec = 10
 $rdp_host = 'ts.afnet.com'
-$rdp_user = 'user1'
+$rdp_user = 'user'
 $rdp_pass = '!@12QWqwe'
 $net_root = '\\TS\Shared'
 $web_urls = 'espn.com,cnn.com,facebook.com,yahoo.com,news.google.com'

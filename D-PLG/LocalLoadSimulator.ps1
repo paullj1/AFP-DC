@@ -4,13 +4,13 @@
 $runtime      = [int]$args[0]
 $reqs_per_sec = [int]$args[1]
 $rdp_host     = $args[2]
-$name         = $args[3]
+$name_base    = $args[3]
 $pass         = $args[4]
 $net_use_host = $args[5]
 $urls         = $args[6]
 
 
-$runtime = 300
+$runtime = 604800 # 1 Week
 $reqs_per_second = 10
 
 $rdp = 0
@@ -22,7 +22,7 @@ $num_services = 1
 if ($runtime -eq $null) { $runtime = 60 }
 if ($reqs_sec -eq $null) { $reqs_sec = 10 }
 if ($rdp_host -eq $null) { $rdp_host = 'ts.afnet.com' }
-if ($name -eq $null ) { $name = "user1" }
+if ($name_base -eq $null ) { $name_base = "user" }
 if ($pass -eq $null ) { $pass = "!@12QWqwe" }
 if ($net_use_host -eq $null) { $net_use_host = '\\TS\Shared' }
 if ($urls -eq $null ) { $urls = "google.com,yahoo.com,espn.com".Split(',') }
@@ -34,6 +34,7 @@ do {
     for ( $i = 0; $i -lt $reqs_sec; $i+=$num_services ) {
 
         # Simple AD Authentication (use RDP credentials)
+        $name = $name_base + (Get-Random -Minimum 0 -Maximum 30000)
         if ((new-object directoryservices.directoryentry "",$name,$pass).psbase.name -eq $null) {
 
             # Make connection
@@ -47,7 +48,7 @@ do {
             $writer.WriteLine("SERVICE_FAILURE") | Out-Null
             start-sleep -Milliseconds 500
             
-            $reader.Close()
+            $writer.Close()
             $connection.Close()
             Exit
         }
